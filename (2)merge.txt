@@ -1,0 +1,70 @@
+(2)
+
+#include <stdio.h>
+#include <omp.h>
+
+void merge(int a[],int low,int mid, int high)
+{
+	int i,j,k,b[200];
+	i=low;
+	j=mid+1;
+	k=low;
+
+	while(i<=mid && j<=high)
+	{
+		if(a[i]<=a[j])
+			b[k++]=a[i++];
+		else
+			b[k++]=a[j++];
+	}
+
+	while(i<=mid)
+		b[k++]=a[i++];
+	while(j<=high)
+		b[k++]=a[j++];
+
+	for(k=low;k<=high;k++)
+		a[k]=b[k];
+}
+
+void mergesort(int a[],int low,int high)
+{
+	int mid;
+	if(low<high)
+	{
+		mid=(low+high)/2;
+		mergesort(a,low,mid-1);
+		mergesort(a,mid+1,high);
+		merge(a,low,mid,high);
+	}
+}
+
+void main()
+{
+	int n,a[1000],k;
+	double start,end,time;
+
+	printf("Enter the size of array:");
+	scanf("%d",&n);
+
+	printf("\nEnter the elements of array:\n");
+	for(k=0;k<n;k++)
+	{
+		a[k]=rand()%100;
+		printf("%d\t",a[k]);
+	}
+
+	start=omp_get_wtime();
+	mergesort(a,0,n-1);
+	end=omp_get_wtime();
+
+	time=end-start;
+
+	printf("\nSorted numbers are:\n");
+	for(k=0;k<n;k++)
+		printf("%d\t",a[k]);
+
+	printf("\nThe time taken is %lf",time);
+
+	return 0;
+}
