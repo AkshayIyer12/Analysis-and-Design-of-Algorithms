@@ -1,0 +1,79 @@
+(1)
+#include<stdio.h>
+#include<omp.h>
+main()
+{
+	int a[100000],n,i;
+	double start,end,time;
+
+	printf("Enter the size of array:");
+	scanf("%d",&n);
+
+	printf(" The elements of array are:\n");
+	for(i=0;i<n;i++)
+	{
+		a[i]=rand()%100;
+		printf("%d\t",a[i]);
+	}
+	start=omp_get_wtime();
+
+	quicksort(a,0,n-1);
+
+	end=omp_get_wtime();
+
+	time=end-start;
+
+	printf("\nThe sorted array is:\n");
+	for(i=0;i<n;i++)
+	printf("%d\t",a[i]);
+
+	printf("\n Total time taken=%lf",time);
+	
+	return 0;
+}
+
+void quicksort(int a[],int low,int high)
+{
+	int mid;
+	
+	if(low<high)
+	{
+	mid=partition(a,low,high);
+	quicksort(a,low,mid-1);
+	quicksort(a,mid+1,high);
+	}
+}
+
+int partition(int a[],int low, int high)
+{
+	int i,j,temp,pivot;
+
+	pivot=a[low];
+	i=low;
+	j=high+1;
+
+	do{
+		do i++;
+			while(a[i]<pivot);
+		do j--;
+			while(a[j]>pivot);
+
+
+		if(i<j)
+		{
+			temp=a[i];
+			a[i]=a[j];
+			a[j]=temp;
+		}
+	 }
+
+	while(i<=j);
+
+	temp=a[low];
+	a[low]=a[j];
+	a[j]=temp;
+
+	return j;
+}
+
+

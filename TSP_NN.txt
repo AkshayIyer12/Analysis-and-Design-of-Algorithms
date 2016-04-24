@@ -1,0 +1,56 @@
+//Termwork-9 [Nearest Neighbourhood]
+#include <stdio.h>
+#include <stdlib.h>
+
+int sum=0,n,cost[10][10],min,u,vis[10]={0};
+
+void tsp(int s)
+{
+	int i;	
+	min=999;
+	printf("%5d",s);
+	for(i=1;i<=n;i++)// find the nearest nieghbor
+	{
+		if(cost[s][i] < min && vis[i]==0)
+		{
+			min=cost[s][i];
+			u=i;
+		}
+	}
+	sum = sum + min;
+	vis[u]=1;
+	for(i=1;i<=n;i++)
+	{
+		if(vis[i]==0)
+		{
+			tsp(u);
+		}
+	}
+}
+
+
+int main()
+{
+	int i,j;//,s;
+	printf("\nEnter the number of cities:");
+	scanf("%d",&n);
+	printf("Enter the distance matrix:\n");
+	for(i=1;i<=n;i++)
+	{
+		printf("\n");
+		for(j=1;j<=n;j++)
+		{
+			scanf("%d",&cost[i][j]);
+		}
+	}
+
+
+	printf("\nThe path traversed is...\n");
+	vis[1]=1;
+	tsp(1);
+	sum=sum+cost[u][1];//to return to the source city
+	printf("%5d",u);
+	printf("%5d",1);
+	printf("\nThe minimum distance travelled is :%d\n",sum);
+}
+
